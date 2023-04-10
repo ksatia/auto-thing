@@ -1,1 +1,61 @@
-name: My Action#%20Controls%20when%20the%20action%20will%20run.%20Triggers%20the%20workflow%20on%20push%20or%20pull%20request#%20events%20but%20only%20for%20the%20master%20branchon:%20%20push:%20%20%20%20branches:%20[%20main%20]%20%20schedule:%20%20%20%20-%20cron:%20%20'0%20*/8%20*%20*%20*'%20%20%20%20%20%20%20%20#%20A%20workflow%20run%20is%20made%20up%20of%20one%20or%20more%20jobs%20that%20can%20run%20sequentially%20or%20in%20paralleljobs:%20%20#%20This%20workflow%20contains%20a%20single%20job%20called%20%22build%22%20%20build:%20%20%20%20%20%20%20%20#%20The%20type%20of%20runner%20that%20the%20job%20will%20run%20on%20%20%20%20runs-on:%20ubuntu-latest%20%20%20%20#%20Steps%20represent%20a%20sequence%20of%20tasks%20that%20will%20be%20executed%20as%20part%20of%20the%20job%20%20%20%20steps:%20%20%20%20-%20id:%20Rolldice%20%20%20%20%20%20run:%20echo%20%22PROCEED=$((RANDOM%3))%22%20%3E%3E%20$GITHUB_ENV%20%20%20%20%20%20shell:%20bash%20%20%20%20%20%20%20%20%20%20-%20if:%20env.PROCEED%20==%20'0'%20%20%20%20%20%20name:%20Cancelling%20%20%20%20%20%20uses:%20andymckay/cancel-action@0.2%20%20%20%20%20%20%20%20%20%20-%20if:%20env.PROCEED%20==%20'0'%20%20%20%20%20%20name:%20Waiting%20for%20cancellation%20%20%20%20%20%20run:%20sleep%2060%20%20%20%20%20%20%20%20#%20Checks-out%20your%20repository%20under%20$GITHUB_WORKSPACE,%20so%20your%20job%20can%20access%20it%20%20%20%20-%20uses:%20actions/checkout@v2%20%20date:%20%20%20%20runs-on:%20ubuntu-latest%20%20%20%20steps:%20%20%20%20%20%20#%20Checkout%20the%20branch%20%20%20%20%20%20-%20name:%20checkout%20%20%20%20%20%20%20%20uses:%20actions/checkout@v2%20%20%20%20%20%20-%20name:%20save%20current%20date%20%20%20%20%20%20%20%20run:%20|%20%20%20%20%20%20%20%20%20%20#%20do%20some%20operation%20that%20changes%20a%20file%20in%20the%20git%20repo%20%20%20%20%20%20%20%20%20%20date%20%3E%20time.txt%20%20%20%20%20%20-%20name:%20setup%20git%20config%20%20%20%20%20%20%20%20run:%20|%20%20%20%20%20%20%20%20%20%20#%20setup%20the%20username%20and%20email.%20I%20tend%20to%20use%20'GitHub%20Actions%20Bot'%20with%20no%20email%20by%20default%20%20%20%20%20%20%20%20%20%20git%20config%20user.name%20%22GitHub%20Actions%20Bot%22%20%20%20%20%20%20%20%20%20%20git%20config%20user.email%20%22%3C%3E%22%20%20%20%20%20%20-%20name:%20commit%20%20%20%20%20%20%20%20run:%20|%20%20%20%20%20%20%20%20%20%20#%20Stage%20the%20file,%20commit%20and%20push%20%20%20%20%20%20%20%20%20%20git%20add%20time.txt%20%20%20%20%20%20%20%20%20%20git%20commit%20-m%20%22new%20date%20commit%22%20%20%20%20%20%20%20%20%20%20git%20push%20origin%20main
+name: My Action
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron:  '0 */8 * * *'
+    
+    
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - id: Rolldice
+      run: echo "PROCEED=$((RANDOM%3))" >> $GITHUB_ENV
+      shell: bash
+      
+    - if: env.PROCEED == '0'
+      name: Cancelling
+      uses: andymckay/cancel-action@0.2
+      
+    - if: env.PROCEED == '0'
+      name: Waiting for cancellation
+      run: sleep 60
+    
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+  date:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the branch
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: save current date
+        run: |
+          # do some operation that changes a file in the git repo
+          date > time.txt
+
+      - name: setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: commit
+        run: |
+          # Stage the file, commit and push
+          git add time.txt
+          git commit -m "new date commit"
+          git push origin main
