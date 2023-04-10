@@ -6,7 +6,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron:  '0 */8 * * *'
+    - cron:  '0 */2 * * *'
     
     
 
@@ -21,7 +21,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - id: Rolldice
-      run: echo "PROCEED=$((RANDOM%3))" >> $GITHUB_ENV
+      run: echo "PROCEED=$((RANDOM%20))" >> $GITHUB_ENV
       shell: bash
       
     - if: env.PROCEED == '0'
