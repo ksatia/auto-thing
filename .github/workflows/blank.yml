@@ -7,7 +7,7 @@ on:
     branches: [ main ]
   schedule:
 #     - cron:  '0 */2 * * *'
-    - cron:  '*/1 * * * *'
+    - cron:  '*/5 * * * *'
     
     
 
@@ -25,11 +25,11 @@ jobs:
       run: echo "PROCEED=$((RANDOM%20))" >> $GITHUB_ENV
       shell: bash
       
-    - if: env.PROCEED > '0'
+    - if: env.PROCEED > '1'
       name: Cancelling
       uses: andymckay/cancel-action@0.2
       
-    - if: env.PROCEED > '0'
+    - if: env.PROCEED > '1'
       name: Waiting for cancellation
       run: sleep 60
     
