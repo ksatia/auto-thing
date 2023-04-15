@@ -2,8 +2,8 @@ name: Auto Thing
 on:
   push:
     branches: [ main ]
-  schedule:
-    - cron:  '0 */1 * * *'
+#   schedule:
+#     - cron:  '0 */1 * * *'
 
 jobs:
   build:
