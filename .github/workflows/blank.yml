@@ -2,8 +2,8 @@ name: Auto Thing
 on:
   push:
     branches: [ main ]
-#   schedule:
-#     - cron:  '0 */1 * * *'
+  schedule:
+    - cron:  '0 */1 * * *'
 
 jobs:
   build:
@@ -33,8 +33,8 @@ jobs:
 
       - name: setup git config
         run: |
-          git config user.name "matt-meaningfulgigs"
-          git config user.email "mattmeling@gmail.com"
+          git config user.name "ksatia"
+          git config user.email "ksatia@gmail.com"
 
       - name: commit
         run: |
