@@ -15,7 +15,7 @@ jobs:
       
     - if: env.PROCEED > '1'
       name: Cancelling
-      uses: andymckay/cancel-action@0.2
+      uses: andymckay/cancel-action@0.3
       
     - if: env.PROCEED > '1'
       name: Waiting for cancellation
